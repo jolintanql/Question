@@ -16,7 +16,7 @@ services:
     container_name: webapp
     build: ./webapp
     ports:
-      - "80:80"
+      - "8081:80"  # Change the host port to 8081
 
   gitea:
     container_name: gitea
@@ -36,7 +36,7 @@ services:
   flaskapp:
     build: ./webapp
     ports:
-      - "5000:5000"
+      - "5001:5000"  # Change the host port to 5001
     volumes:
       - ./webapp:/app
 
@@ -45,3 +45,4 @@ volumes:
     driver: local
   gitea:
     driver: local
+
