@@ -16,19 +16,20 @@ services:
     container_name: webapp
     build: ./webapp
     ports:
-      - "8081:80"  # Change the host port to 8081
+      - "8081:8080"  # Change the host port to 8081
 
   gitea:
     container_name: gitea
     image: gitea/gitea:latest
     environment:
+    
       - USER_UID=1000
       - USER_GID=1000
     restart: always
     volumes:
       - gitea:/data
     ports:
-      - "3000:3000"
+      - "3001:3000"
       - "222:22"
     extra_hosts:
       - "gitea.local:127.0.0.1"
