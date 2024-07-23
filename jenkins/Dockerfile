@@ -1,19 +1,17 @@
+# Use the official Jenkins LTS image as the base image
 FROM jenkins/jenkins:lts
+
+# Switch to the root user to install additional packages
 USER root
 
-ENV JENKINS_USER admin
-ENV JENKINS_PASS Raymond
+# Install any necessary packages (optional)
+# For example, to install sudo and Docker CLI:
+RUN apt-get update && \
+    apt-get install -y sudo docker.io && \
+    apt-get clean
 
+# Ensure the Jenkins user can use Docker
+RUN usermod -aG docker jenkins
 
-#id_rsa.pub file will be saved at /root/.ssh/
-RUN ssh-keygen -f /root/.ssh/id_rsa -t rsa -N ''  
-
-
-# allows to skip Jenkins setup wizard
-ENV JAVA_OPTS -Djenkins.install.runSetupWizard=false
-
-# Jenkins runs all grovy files from init.groovy.d dir
-# use this for creating default admin user
-COPY default-user.groovy /usr/share/jenkins/ref/init.groovy.d/
-
-VOLUME /var/jenkins_home 
+# Switch back to the Jenkins user
+USER jenkins

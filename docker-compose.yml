@@ -11,13 +11,37 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./jenkins_home:/var/jenkins_home
-  
+
   webapp:
     container_name: webapp
     build: ./webapp
     ports:
       - "80:80"
 
+  gitea:
+    container_name: gitea
+    image: gitea/gitea:latest
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+    restart: always
+    volumes:
+      - gitea:/data
+    ports:
+      - "3000:3000"
+      - "222:22"
+    extra_hosts:
+      - "gitea.local:127.0.0.1"
+
+  flaskapp:
+    build: ./webapp
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./webapp:/app
+
 volumes:
   jenkins_data:
+    driver: local
+  gitea:
     driver: local
